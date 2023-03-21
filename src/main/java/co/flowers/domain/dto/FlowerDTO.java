@@ -22,6 +22,9 @@ public class FlowerDTO {
     @NotNull (message = "Scientific Name can't be null")
     private String scientificName;
 
+    @NotNull (message = "Color can't be null")
+    private String color;
+
     @NotNull(message = "Type can't be null")
     private String type;
 
@@ -32,6 +35,5 @@ public class FlowerDTO {
     private Integer stock;
 
     private Boolean available= true;
-
 
 }

@@ -2,6 +2,7 @@ package co.flowers.router;
 
 import co.flowers.domain.dto.FlowerDTO;
 import co.flowers.usecases.GetAllFlowerUseCase;
+import co.flowers.usecases.GetFlowerByIdUseCase;
 import co.flowers.usecases.SaveFlowerUseCase;
 import co.flowers.usecases.interfaces.SaveFlower;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,17 @@ public class FlowerRouter {
     }
 
     @Bean
+    public RouterFunction<ServerResponse> getFlowerById(GetFlowerByIdUseCase getFlowerByIdUseCase){
+        return route(GET("flowers/{id}"),
+                request -> getFlowerByIdUseCase.apply(request.pathVariable("id"))
+                        .flatMap(flowerDTO -> ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue(flowerDTO))
+                        .onErrorResume(throwable -> ServerResponse.notFound().build())
+        );
+    }
+
+    @Bean
     public RouterFunction<ServerResponse> saveFlower (SaveFlowerUseCase saveFlowerUseCase){
         return route(POST("/flowers").and(accept(MediaType.APPLICATION_JSON)),
                 request -> request.bodyToMono(FlowerDTO.class)
@@ -39,4 +51,6 @@ public class FlowerRouter {
                                 .onErrorResume(throwable -> ServerResponse.status(HttpStatus.BAD_REQUEST).build()))
         );
     }
+
+
 }
