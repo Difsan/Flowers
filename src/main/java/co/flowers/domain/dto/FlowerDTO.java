@@ -31,7 +31,7 @@ public class FlowerDTO {
     @NotNull(message = "Stock can't be null")
     private Integer stock;
 
-    private Boolean available;
+    private Boolean available= true;
 
 
 }
