@@ -4,10 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -19,8 +15,8 @@ public class FlowerDTO {
     @NotNull (message = "Common Name can't be null")
     private String commonName;
 
-    @NotNull (message = "Scientific Name can't be null")
-    private String scientificName;
+    @NotNull (message = "Family can't be null")
+    private String family;
 
     @NotNull (message = "Color can't be null")
     private String color;
