@@ -36,5 +36,4 @@ public class Flower {
 
     private Boolean available = true;
 
-
 }
