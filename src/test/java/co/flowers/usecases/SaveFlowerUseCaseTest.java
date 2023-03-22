@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class SaveFlowerUseCaseTest {
@@ -50,7 +51,7 @@ class SaveFlowerUseCaseTest {
                 .expectComplete()
                 .verify();
 
-        Mockito.verify(repository).save(flower);
+        Mockito.verify(repository, times(1)).save(flower);
     }
 
     @Test
@@ -69,6 +70,6 @@ class SaveFlowerUseCaseTest {
                         throwable.getMessage().equals(HttpStatus.BAD_REQUEST.toString()))
                 .verify();
 
-        Mockito.verify(repository).save(flower);
+        Mockito.verify(repository, times(1)).save(flower);
     }
 }

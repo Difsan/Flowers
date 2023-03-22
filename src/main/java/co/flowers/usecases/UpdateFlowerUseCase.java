@@ -21,7 +21,8 @@ public class UpdateFlowerUseCase implements UpdateFlower {
 
     @Override
     public Mono<FlowerDTO> update(String id, FlowerDTO flowerDTO) {
-        return this.flowerRepository.findById(id)
+        return this.flowerRepository
+                .findById(id)
                 .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NOT_FOUND.toString())))
                 .flatMap(flower -> {
                     flowerDTO.setId(flowerDTO.getId());

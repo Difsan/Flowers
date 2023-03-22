@@ -15,51 +15,54 @@ import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-class GetFlowerByIdUseCaseTest {
+class DeleteFlowerUseCaseTest {
 
     @Mock
     IFlowerRepository repository;
 
     ModelMapper mapper;
 
-    GetFlowerByIdUseCase getFlowerByIdUseCase;
+    DeleteFlowerUseCase deleteFlowerUseCase;
 
     @BeforeEach
     void setUp(){
         mapper = new ModelMapper();
-        getFlowerByIdUseCase = new GetFlowerByIdUseCase(repository, mapper);
+        deleteFlowerUseCase = new DeleteFlowerUseCase(repository, mapper);
     }
 
     @Test
-    @DisplayName("getFlowerById_Success")
-    void getFlowerById(){
+    @DisplayName("deleteFlowerById_Success")
+    void deleteFlowerById(){
         var flower = new Flower("Rose" , "Rosaceae", "pink", "Virginia rose", "Peru",
                 97);
         flower.setId("1");
 
         Mockito.when(repository.findById(Mockito.any(String.class))).thenReturn(Mono.just(flower));
 
-        var result = getFlowerByIdUseCase.apply("1");
+        Mockito.when(repository.deleteById(Mockito.any(String.class))).thenReturn(Mono.empty());
+
+        var result = deleteFlowerUseCase.apply("1");
 
         StepVerifier.create(result)
-                .expectNext(mapper.map(flower, FlowerDTO.class))
+                .expectNext()
                 .expectComplete()
                 .verify();
 
         Mockito.verify(repository, times(1)).findById("1");
+        Mockito.verify(repository, times(1)).deleteById("1");
     }
 
     @Test
-    @DisplayName("getFlowerById_Failed")
-    void getFlowerById_Failed(){
+    @DisplayName("deleteFlowerById_Failed")
+    void deleteFlowerById_Failed(){
         Mockito.when(repository.findById(Mockito.any(String.class)))
                 .thenReturn(Mono.error(new Throwable(HttpStatus.NOT_FOUND.toString())));
 
-        var result = getFlowerByIdUseCase.apply("1");
+        var result = deleteFlowerUseCase.apply("1");
 
         StepVerifier.create(result)
                 .expectErrorMatches(throwable -> throwable != null &&
@@ -67,5 +70,6 @@ class GetFlowerByIdUseCaseTest {
                 .verify();
 
         Mockito.verify(repository, times(1)).findById("1");
+        Mockito.verify(repository, never()).deleteById("1");
     }
 }

@@ -15,6 +15,7 @@ import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class GetAllFlowerUseCaseTest {
@@ -51,7 +52,7 @@ class GetAllFlowerUseCaseTest {
                 .expectNextCount(3)
                 .verifyComplete();
 
-        Mockito.verify(repository).findAll();
+        Mockito.verify(repository, times(1)).findAll();
     }
 
     @Test
@@ -66,6 +67,6 @@ class GetAllFlowerUseCaseTest {
                 throwable.getMessage().equals(HttpStatus.NOT_FOUND.toString()))
                 .verify();
 
-        Mockito.verify(repository).findAll();
+        Mockito.verify(repository, times(1)).findAll();
     }
 }
