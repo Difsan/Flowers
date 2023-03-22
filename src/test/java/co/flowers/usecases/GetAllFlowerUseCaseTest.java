@@ -37,11 +37,9 @@ class GetAllFlowerUseCaseTest {
     @DisplayName("getAllFlowers_Success")
     void getAllFlowers(){
         var fluxFlowers = Flux.just(new Flower("Daisy", "Asteraceae",
-                        "white", "crown", "Mediterranean coast", 50),
-                new Flower("Rose" , "Rosaceae", "pink", "Virginia rose", "Peru",
-                97),
-                new Flower("sunflower", "Asteraceae", "yellow", "sunflower", "Mexico",
-                        70)
+                        "white", "crown", "Mediterranean coast"),
+                new Flower("Rose" , "Rosaceae", "pink", "Virginia rose", "Peru"),
+                new Flower("sunflower", "Asteraceae", "yellow", "sunflower", "Mexico")
                 );
 
         Mockito.when(repository.findAll()).thenReturn(fluxFlowers);

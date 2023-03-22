@@ -37,8 +37,7 @@ class GetFlowerByIdUseCaseTest {
     @Test
     @DisplayName("getFlowerById_Success")
     void getFlowerById(){
-        var flower = new Flower("Rose" , "Rosaceae", "pink", "Virginia rose", "Peru",
-                97);
+        var flower = new Flower("Rose" , "Rosaceae", "pink", "Virginia rose", "Peru");
         flower.setId("1");
 
         Mockito.when(repository.findById(Mockito.any(String.class))).thenReturn(Mono.just(flower));

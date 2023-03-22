@@ -27,9 +27,6 @@ public class FlowerDTO {
     @NotNull(message = "Origin can't be null")
     private String origin;
 
-    @NotNull(message = "Stock can't be null")
-    private Integer stock;
-
-    private Boolean available= true;
+    private Boolean inStock = true;
 
 }

@@ -31,20 +31,16 @@ public class Flower {
     @NotNull(message = "Origin can't be null")
     private String origin;
 
-    @NotNull(message = "Stock can't be null")
-    private Integer stock;
-
-    private Boolean available;
+    private Boolean inStock;
 
     public Flower(String commonName, String family,
-                  String color, String type, String origin, Integer stock) {
+                  String color, String type, String origin) {
         this.id = UUID.randomUUID().toString().substring(0, 10);
         this.commonName = commonName;
         this.family = family;
         this.color = color;
         this.type = type;
         this.origin = origin;
-        this.stock = stock;
-        this.available = true;
+        this.inStock = true;
     }
 }

@@ -38,7 +38,7 @@ class SaveFlowerUseCaseTest {
     @DisplayName("saveFlower_Success")
     void saveFlower(){
         var flower =  new Flower("sunflower", "Asteraceae", "yellow",
-                "sunflower", "Mexico",70);
+                "sunflower", "Mexico");
 
         var monoFlower = Mono.just(flower);
 
@@ -58,7 +58,7 @@ class SaveFlowerUseCaseTest {
     @DisplayName("saveFlower_Failed")
     void saveFlower_Failed(){
         var flower =  new Flower("sunflower", "Asteraceae", "yellow",
-                "sunflower", "Mexico",70);
+                "sunflower", "Mexico");
 
         Mockito.when(repository.save(Mockito.any(Flower.class)))
                 .thenReturn(Mono.error(new Throwable(HttpStatus.BAD_REQUEST.toString())));

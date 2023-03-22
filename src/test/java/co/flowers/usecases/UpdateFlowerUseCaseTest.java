@@ -40,7 +40,7 @@ class UpdateFlowerUseCaseTest {
     void updateFlower(){
 
         var flower = new Flower("Daisy", "Asteraceae",
-                "white", "crown", "Mediterranean coast", 50);
+                "white", "crown", "Mediterranean coast");
         flower.setId("1");
 
         var monoFlower = Mono.just(flower);
@@ -48,7 +48,7 @@ class UpdateFlowerUseCaseTest {
         Mockito.when(repository.findById(Mockito.any(String.class))).thenReturn(monoFlower);
 
         var flowerUpdated = new Flower("Daisy", "Asteraceae",
-                "red", "English", "England", 25);
+                "red", "English", "England");
         flowerUpdated.setId("1");
 
         Mockito.when(repository.save(Mockito.any(Flower.class))).thenReturn(Mono.just(flowerUpdated));
@@ -69,7 +69,7 @@ class UpdateFlowerUseCaseTest {
     @DisplayName("updateFlower_Failed")
     void updateFlower_Failed(){
         var flowerUpdated = new Flower("Daisy", "Asteraceae",
-                "red", "English", "England", 25);
+                "red", "English", "England");
         flowerUpdated.setId("1");
 
         Mockito.when(repository.findById(Mockito.any(String.class)))
