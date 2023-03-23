@@ -21,7 +21,9 @@ public class DeleteFlowerUseCase implements Function<String, Mono<Void>> {
     public Mono<Void> apply(String id) {
         return this.flowerRepository
                 .findById(id)
-                .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NOT_FOUND.toString())))
+                //.switchIfEmpty(Mono.error(new Throwable(HttpStatus.NOT_FOUND.toString())))
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("There is not " +
+                        "flower with id: " + id)))
                 .flatMap(flower -> this.flowerRepository.deleteById(flower.getId()));
     }
 }

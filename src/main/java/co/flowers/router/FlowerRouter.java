@@ -4,10 +4,12 @@ import co.flowers.domain.customer.CustomerDTO;
 import co.flowers.domain.dto.FlowerDTO;
 import co.flowers.usecases.*;
 import co.flowers.usecases.interfaces.SaveFlower;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -17,6 +19,9 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
+
+//@Component
+//@AllArgsConstructor
 //@RequestMapping("/flowers")
 public class FlowerRouter {
 
@@ -29,7 +34,8 @@ public class FlowerRouter {
                 request -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromPublisher(getAllFlowerUseCase.get(), FlowerDTO.class))
-                        .onErrorResume(throwable -> ServerResponse.noContent().build()));
+                        //.onErrorResume(throwable -> ServerResponse.noContent().build()));
+                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage())));
     }
 
     @Bean
@@ -39,7 +45,8 @@ public class FlowerRouter {
                         .flatMap(flowerDTO -> ServerResponse.ok()
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .bodyValue(flowerDTO))
-                        .onErrorResume(throwable -> ServerResponse.notFound().build())
+                        //.onErrorResume(throwable -> ServerResponse.notFound().build())
+                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
         );
     }
 
@@ -51,7 +58,7 @@ public class FlowerRouter {
                                 .flatMap(result -> ServerResponse.status(201)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .bodyValue(result))
-                                .onErrorResume(throwable -> ServerResponse.status(HttpStatus.BAD_REQUEST).build()))
+                                .onErrorResume(throwable -> ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValue(throwable.getMessage())))
         );
     }
 
@@ -64,8 +71,8 @@ public class FlowerRouter {
                                 .flatMap(result -> ServerResponse.status(201)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .bodyValue(result))
-                                .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).build())
-                        ));
+                                .onErrorResume(throwable -> ServerResponse.status(HttpStatus.BAD_REQUEST)
+                                        .bodyValue(throwable.getMessage()))));
     }
 
     @Bean
@@ -81,8 +88,9 @@ public class FlowerRouter {
                                         .flatMap(flowerDTO -> ServerResponse.ok()
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .bodyValue(customerDTO))
-                                        .onErrorResume(throwable -> ServerResponse.badRequest().build())));
-                                //.onErrorResume(throwable -> ServerResponse.badRequest().bodyValue(CustomerDTO.class)));
+                                        //.onErrorResume(throwable -> ServerResponse.badRequest().build())));
+                                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.BAD_REQUEST)
+                                                .bodyValue(throwable.getMessage()))));
     }
 
     @Bean
@@ -93,7 +101,8 @@ public class FlowerRouter {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .bodyValue("Flower deleted"))
                         .flatMap(serverResponseMono -> serverResponseMono)
-                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).build())
+                        //.onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).build())
+                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
         );
     }
 

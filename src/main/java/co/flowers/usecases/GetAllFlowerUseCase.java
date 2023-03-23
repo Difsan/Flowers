@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.function.Supplier;
 
@@ -22,6 +23,7 @@ public class GetAllFlowerUseCase implements Supplier<Flux<FlowerDTO>> {
         return this.flowerRepository
                 .findAll()
                 //.switchIfEmpty(Flux.error(new Throwable(HttpStatus.NO_CONTENT.toString())))
+                //.switchIfEmpty(Flux.error(new IllegalArgumentException("There is not flowers")))
                 .switchIfEmpty(Flux.empty())
                 .map(flower -> mapper.map(flower, FlowerDTO.class));
     }

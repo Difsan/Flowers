@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -23,7 +24,8 @@ public class UpdateFlowerUseCase implements UpdateFlower {
     public Mono<FlowerDTO> update(String id, FlowerDTO flowerDTO) {
         return this.flowerRepository
                 .findById(id)
-                .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NOT_FOUND.toString())))
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("There is not " +
+                        "flower with id: " + id)))
                 .flatMap(flower -> {
                     flowerDTO.setId(flowerDTO.getId());
                     return flowerRepository.save(mapper.map(flowerDTO, Flower.class));

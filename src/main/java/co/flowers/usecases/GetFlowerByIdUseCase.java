@@ -19,7 +19,9 @@ public class GetFlowerByIdUseCase implements Function<String, Mono<FlowerDTO>> {
     @Override
     public Mono<FlowerDTO> apply(String id) {
         return this.flowerRepository.findById(id)
-                .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NOT_FOUND.toString())))
+                //.switchIfEmpty(Mono.error(new Throwable(HttpStatus.NOT_FOUND.toString())))
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("There is not " +
+                        "flower with id: " + id)))
                 .map(flower -> mapper.map(flower, FlowerDTO.class));
     }
 }

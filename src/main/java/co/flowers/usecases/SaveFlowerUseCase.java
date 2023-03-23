@@ -23,5 +23,6 @@ public class SaveFlowerUseCase implements SaveFlower {
                 .save(mapper.map(flowerDTO, Flower.class))
                 .switchIfEmpty(Mono.empty())
                 .map(flower -> mapper.map(flower, FlowerDTO.class));
+                //.onErrorResume(Mono::error);
     }
 }
