@@ -5,6 +5,7 @@ import co.flowers.domain.dto.FlowerDTO;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class CustomerDTO {
@@ -19,5 +20,5 @@ public class CustomerDTO {
 
     private String phoneNumber;
 
-    private List<FlowerDTO> flowers;
+    private Set<FlowerDTO> flowers;
 }

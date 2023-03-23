@@ -27,7 +27,8 @@ public class BuyFlowerUseCase implements BuyFlower {
         System.out.println("Flower: "+flowerID);
         return this.flowerRepository
                 .findById(flowerID)
-                .switchIfEmpty(Mono.empty())
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("There is not " +
+                        "flower with id: " + flowerID)))
                 //.filter(Flower::getInStock)
                 //.switchIfEmpty(Mono.empty())
                 .flatMap(flower -> {
