@@ -1,5 +1,6 @@
 package co.flowers.router;
 
+import co.flowers.domain.customer.CustomerDTO;
 import co.flowers.domain.dto.FlowerDTO;
 import co.flowers.usecases.*;
 import co.flowers.usecases.interfaces.SaveFlower;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
@@ -18,6 +20,9 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 //@RequestMapping("/flowers")
 public class FlowerRouter {
 
+    private WebClient customerAPI;
+
+    public FlowerRouter(){ customerAPI = WebClient.create("http://localhost:8081");}
     @Bean
     public RouterFunction<ServerResponse> getAllFlowers (GetAllFlowerUseCase getAllFlowerUseCase){
         return route(GET("/flowers"),
@@ -61,6 +66,23 @@ public class FlowerRouter {
                                         .bodyValue(result))
                                 .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).build())
                         ));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> buyFlower(BuyFlowerUseCase buyFlowerUseCase){
+        return route(POST("flowers/{id_f}/buy/{id_c}"),
+                request ->
+                        customerAPI.get()
+                                .uri("/customers/"+request.pathVariable("id_c"))
+                                .retrieve()
+                                .bodyToMono(CustomerDTO.class)
+                                .flatMap(customerDTO -> buyFlowerUseCase
+                                        .buy(request.pathVariable("id_f"), customerDTO.getId())
+                                        .flatMap(flowerDTO -> ServerResponse.ok()
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .bodyValue(customerDTO))
+                                        .onErrorResume(throwable -> ServerResponse.badRequest().build())));
+                                //.onErrorResume(throwable -> ServerResponse.badRequest().bodyValue(CustomerDTO.class)));
     }
 
     @Bean
