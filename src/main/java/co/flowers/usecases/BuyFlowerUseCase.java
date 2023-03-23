@@ -23,11 +23,13 @@ public class BuyFlowerUseCase implements BuyFlower {
 
     @Override
     public Mono<FlowerDTO> buy(String flowerID, String customerId) {
+        System.out.println("Customer id: " +customerId);
+        System.out.println("Flower: "+flowerID);
         return this.flowerRepository
                 .findById(flowerID)
                 .switchIfEmpty(Mono.empty())
-                .filter(Flower::getInStock)
-                .switchIfEmpty(Mono.empty())
+                //.filter(Flower::getInStock)
+                //.switchIfEmpty(Mono.empty())
                 .flatMap(flower -> {
                     flower.setInStock(false);
                     return this.flowerRepository.save(flower);
