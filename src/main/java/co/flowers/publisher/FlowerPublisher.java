@@ -24,4 +24,11 @@ public class FlowerPublisher {
 
         rabbitTemplate.convertAndSend("flowers-exchange-events", "events.flower.routing.key", message);
     }
+
+    public void publishReturn(FlowerDTO flowerDTO, String customerId) throws JsonProcessingException {
+
+        String message = objectMapper.writeValueAsString(new FlowerEvent(customerId, flowerDTO, "return"));
+
+        rabbitTemplate.convertAndSend("flowers-exchange-events", "events.flower.routing.key", message);
+    }
 }

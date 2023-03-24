@@ -63,6 +63,8 @@ public class FlowerRouter {
         );
     }
 
+
+
     @Bean
     public RouterFunction<ServerResponse> updateFlower(UpdateFlowerUseCase updateFlowerUseCase){
         return route(PUT("/flowers/{id}").and(accept(MediaType.APPLICATION_JSON)),
@@ -94,6 +96,24 @@ public class FlowerRouter {
                                         //.onErrorResume(throwable -> ServerResponse.badRequest().build())));
                                         .onErrorResume(throwable -> ServerResponse.status(HttpStatus.BAD_REQUEST)
                                                 .bodyValue(throwable.getMessage()))));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> returnFlower(ReturnFlowerUseCase returnFlowerUseCase){
+        return route(POST("flowers/{id_f}/return/{id_c}"),
+                request ->
+                        customerAPI.get()
+                                .uri("/customers/"+request.pathVariable("id_c"))
+                                .retrieve()
+                                .bodyToMono(CustomerDTO.class)
+                                .flatMap(customerDTO -> returnFlowerUseCase
+                                        .returnFlower(request.pathVariable("id_f"), customerDTO.getId())
+                                        .flatMap(flowerDTO -> ServerResponse.ok()
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .bodyValue(customerDTO))
+                                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.BAD_REQUEST)
+                                                .bodyValue(throwable.getMessage())))
+        );
     }
 
     @Bean
