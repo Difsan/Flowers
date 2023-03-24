@@ -37,7 +37,8 @@ class DeleteFlowerUseCaseTest {
     @Test
     @DisplayName("deleteFlowerById_Success")
     void deleteFlowerById(){
-        var flower = new Flower("Rose" , "Rosaceae", "pink", "Virginia rose", "Peru");
+        var flower = new Flower("Rose" , "Rosaceae",
+                "pink", "Virginia rose", "Peru");
         flower.setId("1");
 
         Mockito.when(repository.findById(Mockito.any(String.class))).thenReturn(Mono.just(flower));
