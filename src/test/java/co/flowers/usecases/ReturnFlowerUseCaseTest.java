@@ -41,8 +41,8 @@ class ReturnFlowerUseCaseTest {
     }
 
     @Test
-    @DisplayName("buyFlower_successfully")
-    void buyFlower() {
+    @DisplayName("returnFlower_successfully")
+    void returnFlower() {
         // flower
         Flower flower = new Flower("sunflower", "Asteraceae",
                 "yellow", "sunflower", "Mexico");
@@ -77,8 +77,8 @@ class ReturnFlowerUseCaseTest {
         }
     }
     @Test
-    @DisplayName("buyFlower_Failed")
-    void buyFlower_Failed(){
+    @DisplayName("returnFlower_Failed")
+    void returnFlower_Failed(){
         Flower flower = new Flower("sunflower", "Asteraceae",
                 "yellow", "sunflower", "Mexico");
         flower.setId("1");
